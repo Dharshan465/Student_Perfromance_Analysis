@@ -45,7 +45,7 @@ st.markdown("""
             bottom: 0;
             width: 100%;
             background-color: #f5f5f5;
-            text-align: center;
+            text-align:center;
             padding: 8px;
             font-size: 14px;
             border-top: 2px solid #ddd;
@@ -53,7 +53,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Display Header
 st.markdown("""
     <div class="header-container">
         <div class="header-title">MADRAS INSTITUTE OF TECHNOLOGY</div>
