@@ -49,8 +49,8 @@ def encode_image(image_path):
         return base64.b64encode(img_file.read()).decode()
 
 # Paths to images (update these paths)
-mit_logo_path = "C:/Users/Dharshan.S/Desktop/mit_logo.png"
-anna_logo_path = "C:/Users/Dharshan.S/Desktop/anna_logo_grey.png"
+mit_logo_path = "mit_logo.png"
+anna_logo_path = "anna_logo_grey.png"
 
 # Convert images to Base64
 mit_logo_base64 = encode_image(mit_logo_path)
