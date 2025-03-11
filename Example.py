@@ -50,7 +50,7 @@ def encode_image(image_path):
 
 # Paths to images (update these paths)
 mit_logo_path = "mit_logo.png"
-anna_logo_path = "anna_logo_grey.png"
+anna_logo_path = "https://github.com/Dharshan465/Student_Perfromance_Analysis/blob/160c850e1bf10105c5be91889630a03f8032ae83/anna_logo_grey.png"
 
 # Convert images to Base64
 mit_logo_base64 = encode_image(mit_logo_path)
