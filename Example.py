@@ -49,8 +49,8 @@ def encode_image(image_path):
         return base64.b64encode(img_file.read()).decode()
 
 # Paths to images (update these paths)
-mit_logo_path = "https://github.com/Dharshan465/Student_Perfromance_Analysis/blob/2ed0242427d7c4d8a447ae5324ea22aa7d2dcf37/mit_logo.png"
-anna_logo_path = "https://github.com/Dharshan465/Student_Perfromance_Analysis/blob/160c850e1bf10105c5be91889630a03f8032ae83/anna_logo_grey.png"
+mit_logo_path = "https://imagekit.io/tools/asset-public-link?detail=%7B%22name%22%3A%22mit_logo.png%22%2C%22type%22%3A%22image%2Fpng%22%2C%22signedurl_expire%22%3A%222028-03-10T06%3A02%3A46.534Z%22%2C%22signedUrl%22%3A%22https%3A%2F%2Fmedia-hosting.imagekit.io%2F%2F65772898ed9947be%2Fmit_logo.png%3FExpires%3D1836280967%26Key-Pair-Id%3DK2ZIVPTIP2VGHC%26Signature%3DeYNxNLnL5OPrC8HzRpFHuDAH8Pn0gAVTclrhWJ9VuxoanK-d5nRA~KY9LOB7WVG4TOuYi-COBGTX9QYO8QkVK1Io7oWtFUz6VM6gdxPE65LNouJoh7dRJqYjHKmm1~3AJs8jnx4BkJExgDhSHlHiy68sE0Qj6IKKQI2yHp9YIjJ4NEwUpygNGicOFlohSJoWQHZ4w6wbaHH1OAUoqehgDk35TYIppzSnqjlhv4HFj9k55pU0-DaMWgLn1t5SfPNo5OK6GDOjcC0K2RIaehkUPkwiVXSj-Q-5L4SllmI6wK-ifACEy2OuWu8QasfVHBTdBQWF~97yCAzbsZEAQGWOiA__%22%7D"
+anna_logo_path = "https://imagekit.io/tools/asset-public-link?detail=%7B%22name%22%3A%22anna_logo_grey.png%22%2C%22type%22%3A%22image%2Fpng%22%2C%22signedurl_expire%22%3A%222028-03-10T06%3A00%3A38.062Z%22%2C%22signedUrl%22%3A%22https%3A%2F%2Fmedia-hosting.imagekit.io%2F%2Fd1cd0438295540dc%2Fanna_logo_grey.png%3FExpires%3D1836280838%26Key-Pair-Id%3DK2ZIVPTIP2VGHC%26Signature%3Dhl3vFbcE~wZXa4nsx60sushRLlKa5nnDCSQJf3J3mdkX8GZ0dssG-56NHY7NykuHrLw1VH8iyGS0VFMSrTS1xvEKpOPIO4hIgehkpdjgAxLqYHnWOnhqoVI9sHcvECEN13gzDoWZfNqawuRNSWJU9O9~nsdyw5J3LLoKsPLt6ZZ7ED9eThTtuJqyLYU~q1aI61r-WYQwIDUY4CFLOFtd4DllMFfqilxfRMfvj3CQ9Kk-TSHt93KMXQ8mhsCfoGpcfBR6w3bDHR13l1SxkWYYVbksmO9gKdVSHVS~MGUl-qxD88j2L3KXc1prNic~5EUjfjypXXwAnC8F~5NHkgiK1A__%22%7D"
 
 # Convert images to Base64
 mit_logo_base64 = encode_image(mit_logo_path)
