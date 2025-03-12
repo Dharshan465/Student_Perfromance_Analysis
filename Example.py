@@ -45,7 +45,7 @@ st.markdown("""
             bottom: 0;
             width: 100%;
             background-color: #f5f5f5;
-            text-align:center;
+            text-align: center;
             padding: 8px;
             font-size: 14px;
             border-top: 2px solid #ddd;
@@ -80,13 +80,6 @@ def determine_pass_fail(df):
     student_pass_fail["Status"] = student_pass_fail["Pass"].map({True: "Pass", False: "Fail"})
     return student_pass_fail
 
-# Fail Categories
-def categorize_failures(df):
-    fail_df = df[df["GRADE"] == "U"].copy()
-    fail_df["ESEM"] = fail_df["ESEM"].astype(str).str.strip().str.upper()
-    fail_df["Fail Type"] = fail_df["ESEM"].map({"P": "Prevention", "M": "Malpractice", "A": "Absent"}).fillna("Attempted")
-    return fail_df
-
 # Grade Distribution per Subject
 def grade_distribution_per_subject(df):
     grade_order = ["O", "A+", "A", "B+", "B", "C", "U"]
@@ -119,35 +112,30 @@ def subject_wise_pass_fail(df):
     subject_pass_fail.columns = ["SUBJECT CODE", "Fail", "Pass"]
     return subject_pass_fail
 
-# Chart: Pass/Fail Count
+# Chart: Pass/Fail Count (Pie Chart)
 def pass_fail_chart(df):
     pass_fail_counts = df["Status"].value_counts().reset_index()
     pass_fail_counts.columns = ["Status", "Count"]
     pass_fail_counts = pass_fail_counts.set_index("Status").reindex(["Pass", "Fail"], fill_value=0).reset_index()
     total = pass_fail_counts["Count"].sum()
     pass_fail_counts["Percentage"] = pass_fail_counts["Count"] / total * 100
-    chart = alt.Chart(pass_fail_counts).mark_bar().encode(
-        x=alt.X("Status:N", title="Pass/Fail", sort=["Pass", "Fail"], axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
-        y=alt.Y("Count:Q", title="Number of Students", axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
-        color=alt.Color("Status:N", scale=alt.Scale(domain=["Pass", "Fail"], range=["#5cf074", "#fa4931"])),
-        tooltip=["Status", "Count", alt.Tooltip("Percentage:Q", title="Percentage", format=".1f")]
-    ).properties(title=alt.TitleParams(f"Pass/Fail Count (Total: {total})", fontSize=20, fontWeight="bold"))
-    text = chart.mark_text(dy=-10, fontSize=16, fontWeight="bold").encode(text="Count")
-    return chart + text
 
-# Chart: Fail Categories
-def fail_categories_chart(df):
-    fail_types = ["Prevention", "Malpractice", "Absent", "Attempted"]
-    fail_categories = df["Fail Type"].value_counts().reindex(fail_types, fill_value=0).reset_index()
-    fail_categories.columns = ["Category", "Count"]
-    chart = alt.Chart(fail_categories).mark_bar().encode(
-        x=alt.X("Category:N", title="Fail Category", sort=fail_types, axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
-        y=alt.Y("Count:Q", title="Number of Students", axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
-        color=alt.Color("Category:N"),
-        tooltip=["Category", "Count"]
-    ).properties(title=alt.TitleParams("Fail Categories Breakdown", fontSize=20, fontWeight="bold"))
-    text = chart.mark_text(dy=-10, fontSize=16, fontWeight="bold").encode(text="Count")
-    return chart + text
+    base = alt.Chart(pass_fail_counts).encode(
+        theta=alt.Theta("Count:Q", stack=True),
+        color=alt.Color("Status:N", scale=alt.Scale(domain=["Pass", "Fail"], range=["#5cf074", "#fa4931"]), legend=alt.Legend(title="Status", labelFontSize=16, titleFontSize=18)),
+        tooltip=["Status", "Count", alt.Tooltip("Percentage:Q", title="Percentage", format=".1f")]
+    ).properties(
+        title=alt.TitleParams(f"Pass/Fail Count (Total: {total})", fontSize=20, fontWeight="bold"),
+        width=400,
+        height=400
+    )
+
+    pie = base.mark_arc(outerRadius=120)
+    text = base.mark_text(radius=140, size=16, fontWeight="bold").encode(
+        text="Count:Q"
+    )
+
+    return pie + text
 
 # Chart: Department-wise Pass/Fail
 def plot_department_wise_chart(department_pass_fail, selected_semester):
@@ -162,21 +150,21 @@ def plot_department_wise_chart(department_pass_fail, selected_semester):
     text = chart.mark_text(align="center", baseline="bottom", dy=-5, fontSize=16, fontWeight="bold", color="black").encode(text="Count:Q")
     return chart + text
 
-# Chart: Number of Students by Failed Subjects
+# Chart: Semester-wise Arrear Count Distribution
 def subjects_failed_chart(df):
     chart = alt.Chart(df).mark_bar().encode(
-        x=alt.X("Subjects Failed:N", title="Number of Subjects Failed", axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
+        x=alt.X("Subjects Failed:N", title="No of Arrears", axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
         y=alt.Y("Student Count:Q", title="Number of Students", axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
         color=alt.Color("Subjects Failed:N", scale=alt.Scale(scheme="category20")),
         tooltip=["Subjects Failed", "Student Count"]
-    ).properties(title=alt.TitleParams("Number of Students by Failed Subjects", fontSize=20, fontWeight="bold"))
+    ).properties(title=alt.TitleParams("Semester-wise Arrear Count Distribution", fontSize=20, fontWeight="bold"))
     text = chart.mark_text(dy=-10, fontSize=16, fontWeight="bold").encode(text="Student Count")
     return chart + text
 
 # Chart: Subject-wise Pass/Fail (Multiple Charts if > 5 subjects)
 def plot_subject_wise_pass_fail(subject_pass_fail, title_prefix):
     subject_df = subject_pass_fail.reset_index().melt(id_vars="SUBJECT CODE", var_name="Result", value_name="Count")
-    color_scale = alt.Scale(domain=["Pass", "Fail"],  range=["#5cf074", "#fa4931"])
+    color_scale = alt.Scale(domain=["Pass", "Fail"], range=["#5cf074", "#fa4931"])
     
     subjects = subject_pass_fail["SUBJECT CODE"].tolist()
     subjects_per_chart = 7
@@ -215,8 +203,8 @@ def plot_avg_marks_per_subject(subject_avg, title_prefix):
         subset_data = subject_avg_melted[subject_avg_melted["SUBJECT CODE"].isin(subset_subjects)]
 
         chart = alt.Chart(subset_data).mark_bar(width=30).encode(
-            x=alt.X("SUBJECT CODE:N", title="Subjects", axis=alt.Axis(labelAngle=-45, labelFontSize=16, titleFontSize=18,labelFontWeight="bold")),
-            y=alt.Y("Average Marks:Q", title="Average Marks", axis=alt.Axis(labelFontSize=16, titleFontSize=18,labelFontWeight="bold")),
+            x=alt.X("SUBJECT CODE:N", title="Subjects", axis=alt.Axis(labelAngle=-45, labelFontSize=16, titleFontSize=18, labelFontWeight="bold")),
+            y=alt.Y("Average Marks:Q", title="Average Marks", axis=alt.Axis(labelFontSize=16, titleFontSize=18, labelFontWeight="bold")),
             color=alt.Color("Category:N", scale=color_palette, legend=alt.Legend(title="Category", labelFontSize=16, titleFontSize=18)),
             xOffset=alt.X("Category:N", sort=["INTERNAL", "EXTERNAL", "TOTAL"])
         ).properties(title=alt.TitleParams(f"{title_prefix} - Part {i+1}", fontSize=18, fontWeight="bold"))
@@ -225,6 +213,7 @@ def plot_avg_marks_per_subject(subject_avg, title_prefix):
             text=alt.Text("Average Marks:Q", format=".2f")
         )
         st.altair_chart(chart + text, use_container_width=True)
+
 def plot_grade_distribution_per_subject(subject_grade_counts, title_prefix):
     grade_order = ["O", "A+", "A", "B+", "B", "C", "U"]
     grade_color_scale = alt.Scale(
@@ -233,10 +222,9 @@ def plot_grade_distribution_per_subject(subject_grade_counts, title_prefix):
     )
     
     subjects = subject_grade_counts["SUBCODE"].unique()
-    subjects_per_chart = 6
+    subjects_per_chart = 5  # Maximum of 5 subjects per chart
     num_charts = (len(subjects) + subjects_per_chart - 1) // subjects_per_chart
 
-    # Custom CSS to center the chart
     st.markdown("""
         <style>
         .center-chart {
@@ -253,39 +241,43 @@ def plot_grade_distribution_per_subject(subject_grade_counts, title_prefix):
         subset_subjects = subjects[start_idx:end_idx]
         subset_data = subject_grade_counts[subject_grade_counts["SUBCODE"].isin(subset_subjects)]
 
-        # Base chart with bars, adjusted bar size for spacing
-        base = alt.Chart(subset_data).mark_bar(size=20).encode(  # Reduced bar width to add space
-            x=alt.X("GRADE:N", title="Grade", sort=grade_order, axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
+        # Base chart with bars, no x-axis title
+        bars = alt.Chart(subset_data).mark_bar(size=15).encode(
+            x=alt.X("GRADE:N", title=None, sort=grade_order, axis=alt.Axis(labelFontSize=16, labelFontWeight="bold")),
             y=alt.Y("Count:Q", title="Number of Students", axis=alt.Axis(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold")),
-            color=alt.Color("GRADE:N", scale=grade_color_scale, legend=None)
-        ).properties(
-            height=400  # Keep height fixed, let width adjust dynamically
+            color=alt.Color("GRADE:N", scale=grade_color_scale, legend=alt.Legend(title="Grade", labelFontSize=16, titleFontSize=18))
         )
 
-        # Text layer for counts
-        text = base.mark_text(align="center", baseline="bottom", dy=-5, fontSize=14, fontWeight="bold", color="black").encode(
+        # Text layer for counts, no x-axis title
+        text = alt.Chart(subset_data).mark_text(align="center", baseline="bottom", dy=-5, fontSize=14, fontWeight="bold", color="black").encode(
+            x=alt.X("GRADE:N", sort=grade_order),
+            y=alt.Y("Count:Q"),
             text=alt.condition(alt.datum.Count > 0, alt.Text("Count:Q"), alt.value(""))
         )
 
-        # Layer the bars and text first
-        layered_chart = alt.layer(base, text)
+        # Layer the bars and text before faceting
+        layered_chart = alt.layer(bars, text).properties(
+            height=400
+        )
 
-        # Apply faceting by subject with increased spacing
+        # Apply faceting to the layered chart
         final_chart = layered_chart.facet(
             column=alt.Column("SUBCODE:N", title="Subject", header=alt.Header(labelFontSize=16, labelFontWeight="bold", titleFontSize=18, titleFontWeight="bold"))
         ).properties(
             title=alt.TitleParams(f"{title_prefix} - Part {i+1}", fontSize=20, fontWeight="bold")
         ).configure_facet(
-            spacing=20  # Increased spacing between subject columns
+            spacing=20  # Spacing between facets
         )
 
-        # Center the chart using Streamlit columns and custom CSS
-        col1, col2, col3 = st.columns([1, 2, 1])  # Middle column wider to hold chart
+        # Center the chart and add a custom "Grade" title below via Streamlit
+        col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             st.markdown('<div class="center-chart">', unsafe_allow_html=True)
             st.altair_chart(final_chart, use_container_width=True)
+            st.markdown('<div style="text-align: center; font-size: 18px; font-weight: bold;">Grade</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
-        
+
+# Department-wise Pass/Fail Count
 def department_wise_pass_fail(df):
     df["Pass"] = df["GRADE"] != "U"
     student_pass_fail = df.groupby("REGNO")["Pass"].all().reset_index()
@@ -306,15 +298,12 @@ if uploaded_file:
     if df is None:
         st.stop()
 
-    # Filter columns
     columns_to_keep = ["DEPNAME", "BRNAME", "SEM", "REGNO", "SUBCODE", "SUBTYPE", "SESMARK", "ESEM", "TOTMARK", "GRADE"]
     df = df[columns_to_keep].copy()
 
-    # Dropdowns
     department_options = ["Overall", "Others (Open Elective)"] + sorted(df["DEPNAME"].unique())
     selected_department = st.selectbox("Select Department", department_options)
 
-    # Branch dropdown appears only if a specific department is selected
     if selected_department not in ["Overall", "Others (Open Elective)"]:
         selected_branch = st.selectbox("Select Branch", ["All"] + sorted(df[df["DEPNAME"] == selected_department]["BRNAME"].unique()))
     else:
@@ -322,7 +311,6 @@ if uploaded_file:
 
     selected_semester = st.selectbox("Select Semester", ["Overall", "5", "7"])
 
-    # Filter data based on selections
     filtered_df = df.copy()
     if selected_department == "Others (Open Elective)":
         all_prefixes = tuple(DEPT_PREFIX.values())
@@ -353,31 +341,24 @@ if uploaded_file:
     if selected_semester != "Overall":
         filtered_df = filtered_df[filtered_df["SEM"] == int(selected_semester)]
 
-    # Check if filtered data is empty
     if filtered_df.empty:
         st.warning(f"No data available for {selected_department} - {selected_branch} in Semester {selected_semester}")
     else:
-        # Generate Data for Charts
         pass_fail_df = determine_pass_fail(filtered_df)
-        fail_df = categorize_failures(filtered_df)
         subjects_failed_df = subjects_failed(filtered_df)
         department_pass_fail = department_wise_pass_fail(filtered_df)
         subject_pass_fail = subject_wise_pass_fail(filtered_df)
         subject_avg = avg_marks_per_subject(filtered_df)
         subject_grade_counts = grade_distribution_per_subject(filtered_df)
 
-        # Display Charts based on selection
         if selected_department == "Overall":
             st.subheader("1. Pass/Fail Count")
             st.altair_chart(pass_fail_chart(pass_fail_df), use_container_width=True)
 
-            st.subheader("2. Fail Categories")
-            st.altair_chart(fail_categories_chart(fail_df), use_container_width=True)
-
-            st.subheader("3. Department-wise Pass/Fail Count")
+            st.subheader("2. Department-wise Pass/Fail Count")
             st.altair_chart(plot_department_wise_chart(department_pass_fail, selected_semester), use_container_width=True)
 
-            st.subheader("4. Number of Students by Failed Subjects")
+            st.subheader("3. Semester-wise Arrear Count Distribution")
             st.altair_chart(subjects_failed_chart(subjects_failed_df), use_container_width=True)
 
         elif selected_department == "Others (Open Elective)":
@@ -394,19 +375,16 @@ if uploaded_file:
             st.subheader("1. Pass/Fail Count")
             st.altair_chart(pass_fail_chart(pass_fail_df), use_container_width=True)
 
-            st.subheader("2. Fail Categories")
-            st.altair_chart(fail_categories_chart(fail_df), use_container_width=True)
-
-            st.subheader("3. Subject-wise Pass/Fail Count")
+            st.subheader("2. Subject-wise Pass/Fail Count")
             plot_subject_wise_pass_fail(subject_pass_fail, "Subject-wise Pass/Fail Count")
 
-            st.subheader("4. Average Marks per Subject")
+            st.subheader("3. Average Marks per Subject")
             plot_avg_marks_per_subject(subject_avg, "Average Marks per Subject")
 
-            st.subheader("5. Grade Distribution per Subject")
+            st.subheader("4. Grade Distribution per Subject")
             plot_grade_distribution_per_subject(subject_grade_counts, "Grade Distribution per Subject")
 
-            st.subheader("6. Number of Students by Failed Subjects")
+            st.subheader("5. Semester-wise Arrear Count Distribution")
             st.altair_chart(subjects_failed_chart(subjects_failed_df), use_container_width=True)
 
 # Display Footer
