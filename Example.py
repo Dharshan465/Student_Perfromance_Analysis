@@ -62,9 +62,9 @@ st.markdown("""
         }
         /* Custom layout for content */
         .main {
-            max-width: 85%;  /* Limits content width to 85% of the browser */
-            margin-left: 0;  /* Keeps content flush with the left */
-            margin-right: auto;  /* Pushes content left, leaving space on the right */
+            max-width: 100%;  /* Limits content width to 85% of the browser */
+            margin-left: 10;  /* Keeps content flush with the left */
+            margin-right: 10;  /* Pushes content left, leaving space on the right */
             padding-right: 20px;  /* Adds extra padding on the right */
         }
     </style>
