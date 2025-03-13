@@ -39,12 +39,15 @@ st.markdown("""
             color: #333;
             text-align: center;
             flex-grow: 1;
+            background-color: #99e6ff;
+
         }
         .subheader {
-            font-size: 18px;
-            color: #555;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
             text-align: center;
-            margin-top: -10px;
+            flex-grow: 1;
         }
         .footer-container {
             position: fixed;
