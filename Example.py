@@ -405,6 +405,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-in this code 
-i just need some space on the right side (from the end of the browser )
-how canyou do it
+
