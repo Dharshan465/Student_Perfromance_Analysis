@@ -61,7 +61,7 @@ st.markdown("""
 
 st.markdown("""
     <div class="header-container">
-        <div class="header-title">MADRAS INSTITUTE OF TECHNOLOGY</div>
+        <div class="header-title">MADRAS INSTITUTE OF TECHNOLOGY</div><br>
     <div class="subheader">MIT Campus, Anna University, Chennai-44</div></div>
 """, unsafe_allow_html=True)
 
