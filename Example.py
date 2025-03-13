@@ -1,7 +1,9 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-st.set_page_config(page_title="Student Performance Analysis", layout="wide")
+
+# Set page config without layout="wide"
+st.set_page_config(page_title="Student Performance Analysis")
 
 # Department abbreviations
 DEPT_ABBREVIATIONS = {
@@ -21,7 +23,7 @@ DEPT_PREFIX = {
     "Robotics": "RO", "Rubber and Plastics": "RP"
 }
 
-# Set page layout (header and footer styling)
+# Set page layout (header and footer styling with custom content width)
 st.markdown("""
     <style>
         .header-container {
@@ -40,7 +42,6 @@ st.markdown("""
             text-align: center;
             flex-grow: 1;
             background-color: #99e6ff;
-
         }
         .subheader {
             font-size: 24px;
@@ -58,6 +59,13 @@ st.markdown("""
             padding: 8px;
             font-size: 14px;
             border-top: 2px solid #ddd;
+        }
+        /* Custom layout for content */
+        .main {
+            max-width: 85%;  /* Limits content width to 85% of the browser */
+            margin-left: 0;  /* Keeps content flush with the left */
+            margin-right: auto;  /* Pushes content left, leaving space on the right */
+            padding-right: 20px;  /* Adds extra padding on the right */
         }
     </style>
 """, unsafe_allow_html=True)
@@ -299,6 +307,8 @@ def department_wise_pass_fail(df):
     return department_pass_fail.reindex(columns=["Pass", "Fail"], fill_value=0)
 
 # Streamlit UI
+st.markdown('<div class="main">', unsafe_allow_html=True)  # Start custom layout div
+
 st.title("Student Performance Analysis - Nov 2024")
 
 uploaded_file = st.file_uploader("Upload Excel File", type=["xlsx"])
@@ -396,6 +406,15 @@ if uploaded_file:
 
             st.subheader("5. Semester-wise Arrear Count Distribution")
             st.altair_chart(subjects_failed_chart(subjects_failed_df), use_container_width=True)
+
+st.markdown('</div>', unsafe_allow_html=True)  # Close custom layout div
+
+# Display Footer
+st.markdown("""
+    <div class="footer-container">
+        Dharshan S | 2021506018 | dharshans465@gmail.com
+    </div>
+""", unsafe_allow_html=True)
 
 # Display Footer
 st.markdown("""
