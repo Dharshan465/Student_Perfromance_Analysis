@@ -167,7 +167,7 @@ def plot_subject_wise_pass_fail(subject_pass_fail, title_prefix):
     color_scale = alt.Scale(domain=["Pass", "Fail"], range=["#5cf074", "#fa4931"])
     
     subjects = subject_pass_fail["SUBJECT CODE"].tolist()
-    subjects_per_chart = 7
+    subjects_per_chart = 5
     num_charts = (len(subjects) + subjects_per_chart - 1) // subjects_per_chart
 
     for i in range(num_charts):
@@ -193,7 +193,7 @@ def plot_avg_marks_per_subject(subject_avg, title_prefix):
     color_palette = alt.Scale(domain=["INTERNAL", "EXTERNAL", "TOTAL"], range=["#4682B4", "#8B0000", "#228B22"])
     
     subjects = subject_avg["SUBJECT CODE"].tolist()
-    subjects_per_chart = 7
+    subjects_per_chart = 5
     num_charts = (len(subjects) + subjects_per_chart - 1) // subjects_per_chart
 
     for i in range(num_charts):
