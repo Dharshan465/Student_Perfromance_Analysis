@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
-st.set_page_config(page_title="Student Performance Analysis", layout="wide")
 
 # Department abbreviations
 DEPT_ABBREVIATIONS = {
@@ -21,9 +20,15 @@ DEPT_PREFIX = {
     "Robotics": "RO", "Rubber and Plastics": "RP"
 }
 
-# Set page layout (header and footer styling)
+# Set custom layout with CSS for the entire page
 st.markdown("""
     <style>
+        /* Custom container for the entire page (header, content, footer) */
+        .page-container {
+            max-width: 1200px;  /* Adjust this value to change layout width (e.g., 1000px, 1400px) */
+            margin: 0 auto;     /* Center the content */
+            padding: 0 20px;    /* Add horizontal padding */
+        }
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -40,7 +45,6 @@ st.markdown("""
             text-align: center;
             flex-grow: 1;
             background-color: #99e6ff;
-
         }
         .subheader {
             font-size: 24px;
@@ -50,24 +54,27 @@ st.markdown("""
             flex-grow: 1;
         }
         .footer-container {
-            position: fixed;
-            bottom: 0;
             width: 100%;
             background-color: #f5f5f5;
             text-align: center;
             padding: 8px;
             font-size: 14px;
             border-top: 2px solid #ddd;
+            position: relative;  /* Changed from fixed to relative so it stays within container */
         }
     </style>
 """, unsafe_allow_html=True)
 
+# Wrap the entire page (header, content, footer) in a single div
 st.markdown("""
-    <div class="header-container">
-        <div class="header-title">MADRAS INSTITUTE OF TECHNOLOGY</div>
+    <div class="page-container">
+        <div class="header-container">
+            <div class="header-title">MADRAS INSTITUTE OF TECHNOLOGY</div>
         </div>
-    <div class="subheader">MIT Campus, Anna University, Chennai-44</div>
+        <div class="subheader">MIT Campus, Anna University, Chennai-44</div>
 """, unsafe_allow_html=True)
+
+
 
 # Load Data with Error Handling
 @st.cache_data
@@ -398,8 +405,13 @@ if uploaded_file:
             st.altair_chart(subjects_failed_chart(subjects_failed_df), use_container_width=True)
 
 # Display Footer
+# Your existing code continues here (from st.title("Student Performance Analysis - Nov 2024") onward)
+# ...
+
+# At the very end, close the page-container div after the footer
 st.markdown("""
-    <div class="footer-container">
-        Dharshan S | 2021506018 | dharshans465@gmail.com
-    </div>
+        <div class="footer-container">
+            Dharshan S | 2021506018 | dharshans465@gmail.com
+        </div>
+    </div>  <!-- Close page-container -->
 """, unsafe_allow_html=True)
