@@ -25,7 +25,7 @@ st.markdown("""
     <style>
         /* Custom container for the entire page (header, content, footer) */
         .page-container {
-            max-width: 2000px;  /* Adjust this value to change layout width (e.g., 1000px, 1400px) */
+            max-width: 3000px;  /* Adjust this value to change layout width (e.g., 1000px, 1400px) */
             margin: 0 auto;     /* Center the content */
             padding: 0 20px;    /* Add horizontal padding */
         }
