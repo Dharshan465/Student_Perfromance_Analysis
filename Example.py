@@ -119,7 +119,8 @@ def avg_marks_per_subject(df):
 def subject_wise_pass_fail(df):
     df["Pass"] = df["GRADE"] != "U"
     subject_pass_fail = df.groupby(["SUBCODE", "Pass"]).size().unstack()
-    subject_pass_fail.columns = ["Fail", "Pass"]  # Only 2 columns: Fail and Pass
+    subject_pass_fail = subject_pass_fail.reset_index()  # Moves SUBCODE from index to column
+    subject_pass_fail.columns = ["SUBJECT CODE", "Fail", "Pass"]  # Now 3 columns
     return subject_pass_fail
 
 # Chart: Pass/Fail Count (Pie Chart)
