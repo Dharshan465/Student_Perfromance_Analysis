@@ -1,3 +1,5 @@
+#This App is created by Dharshan S 2021506018 dharshans465@gmail.com
+
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -68,6 +70,7 @@ st.markdown("""
         </div>
     <div class="subheader">MIT Campus, Anna University, Chennai-44</div>
 """, unsafe_allow_html=True)
+#This App is created by Dharshan S 2021506018 dharshans465@gmail.com
 
 # Load Data with Error Handling
 @st.cache_data
@@ -122,6 +125,7 @@ def subject_wise_pass_fail(df):
     subject_pass_fail = subject_pass_fail.reset_index()  # Moves SUBCODE from index to column
     subject_pass_fail.columns = ["SUBJECT CODE", "Fail", "Pass"]  # Now 3 columns
     return subject_pass_fail
+#This App is created by Dharshan S 2021506018 dharshans465@gmail.com
 
 # Chart: Pass/Fail Count (Pie Chart)
 def pass_fail_chart(df):
@@ -171,6 +175,7 @@ def subjects_failed_chart(df):
     ).properties(title=alt.TitleParams("Semester-wise Arrear Count Distribution", fontSize=20, fontWeight="bold"))
     text = chart.mark_text(dy=-10, fontSize=16, fontWeight="bold").encode(text="Student Count")
     return chart + text
+#This App is created by Dharshan S 2021506018 dharshans465@gmail.com
 
 # Chart: Subject-wise Pass/Fail (Multiple Charts if > 5 subjects)
 def plot_subject_wise_pass_fail(subject_pass_fail, title_prefix):
@@ -245,6 +250,7 @@ def plot_grade_distribution_per_subject(subject_grade_counts, title_prefix):
         }
         </style>
     """, unsafe_allow_html=True)
+#This App is created by Dharshan S 2021506018 dharshans465@gmail.com
 
     for i in range(num_charts):
         start_idx = i * subjects_per_chart
@@ -301,6 +307,7 @@ def department_wise_pass_fail(df):
 
 # Streamlit UI
 st.title("Student Performance Analysis - Nov 2024")
+#This App is created by Dharshan S 2021506018 dharshans465@gmail.com
 
 uploaded_file = st.file_uploader("Upload Excel File", type=["xlsx"])
 
@@ -401,9 +408,9 @@ if uploaded_file:
 
 # Display Footer
 #st.markdown("""
-    <div class="footer-container">
-        Dharshan S | 2021506018 | dharshans465@gmail.com
-    </div>
-""", unsafe_allow_html=True)
+ #   <div class="footer-container">
+#        Dharshan S | 2021506018 | dharshans465@gmail.com
+#    </div>
+#""", unsafe_allow_html=True)
 
-
+#This App is created by Dharshan S 2021506018 dharshans465@gmail.com
