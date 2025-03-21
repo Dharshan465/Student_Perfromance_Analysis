@@ -398,12 +398,12 @@ if uploaded_file:
             st.subheader("5. Semester-wise Arrear Count Distribution")
             st.altair_chart(subjects_failed_chart(subjects_failed_df), use_container_width=True)
 
+
 # Display Footer
-st.markdown("""
+#st.markdown("""
     <div class="footer-container">
         Dharshan S | 2021506018 | dharshans465@gmail.com
     </div>
 """, unsafe_allow_html=True)
-
 
 
